@@ -3,6 +3,7 @@
 // Дана строка длины N.Если в ней есть хотя бы одна гласная, отсортируйте буквы по алфавиту.
 #include <iostream>
 #include <chrono>
+#include <string>
 class Timer
 {
 private:
@@ -22,26 +23,29 @@ public:
 		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
 	}
 };
-void Sort(char mas[10000])
+void SWAPSORT(std::string &k)
 {
-	for (int i = 0; i < strlen(mas)-1; i++)
+	std::string m = k;
+	for (int i = 0; i < m.length(); i++)
 	{
-		for (int j = i + 1; j < strlen(mas) - 1; j++)
+		for (int j = i + 1; j < m.length(); j++)
 		{
-			if (mas[i] > mas[j])
+			if (m[i] > m[j])
 			{
-				std::swap(mas[i], mas[j]);
+				std::swap(m[i], m[j]);
+				
 			}
 		}			
 	}	
+	k = m;
 }
-bool isVowels(char mas[10000],char n[7])
+bool isVowels(std::string m, std::string n)
 {
-	for (int i = 0; i < strlen(mas) - 1; i++)
+	for (int i = 0; i < m.length() - 1; i++)
 	{
-		for (int j = i + 1; j < strlen(n); j++)
+		for (int j = i + 1; j < n.length(); j++)
 		{
-			if (mas[i] == mas[j])
+			if (m[i] == n[j])
 			{
 				return true;
 			}
@@ -53,24 +57,21 @@ int main()
 {
 	setlocale(LC_ALL,"RUS");
 	std::cout << "Введите строчку:";
-	unsigned short int N = 10000;
-	char vowels[7] = "eyuioa";
-	char* stroka = new char[N];
-	std::cin.getline(stroka, N);
+	int N = 0;
+	std::string vowels = "eyuioa";
+	std::string stroka;
+	std::cin >> stroka;
+	N = stroka.length();
 	Timer t;
 	if (isVowels(stroka, vowels))
 	{
-		Sort(stroka);
 		std::cout << "Время : " << t.elapsed() << std::endl;
-		for (int i = 0; i < strlen(stroka)-1; i++)
-		{
-			std::cout << stroka[i];
-		}
+		SWAPSORT(stroka);
+		std::cout << stroka <<std::endl;
 	}
 	else
 	{
 		std::cout << "Гласных нет" << std::endl;
 	}
-	delete[] stroka;
 	return 0;
 }
