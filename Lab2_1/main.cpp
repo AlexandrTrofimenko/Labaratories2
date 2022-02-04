@@ -25,7 +25,7 @@ public:
 };
 void SWAPSORT(std::string& m) 
 {
-	for (int i = 0; i < m.length()-1; i++)
+	for (int i = 0; i < m.length(); i++)
 	{
 		for (int j = i + 1; j < m.length(); j++)
 		{
