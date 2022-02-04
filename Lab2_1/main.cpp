@@ -25,7 +25,7 @@ public:
 };
 void SWAPSORT(std::string& m) 
 {
-	for (int i = 0; i < m.length()-1; i++)
+	for (int i = 0; i < m.length(); i++)
 	{
 		for (int j = i + 1; j < m.length(); j++)
 		{
@@ -37,11 +37,11 @@ void SWAPSORT(std::string& m)
 		}			
 	}	
 }
-bool isVowels(std::string m, std::string n)
+bool isVowels(std::string& m, std::string& n)
 {
-	for (int i = 0; i < m.length() - 1; i++)
+	for (int i = 0; i < m.length(); i++)
 	{
-		for (int j = i + 1; j < n.length(); j++)
+		for (int j = i; j < n.length(); j++)
 		{
 			if (m[i] == n[j])
 			{
