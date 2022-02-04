@@ -23,9 +23,8 @@ public:
 		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
 	}
 };
-void SWAPSORT(std::string m) // add & ??
+void SWAPSORT(std::string& m) 
 {
-//	std::string m = k;
 	for (int i = 0; i < m.length()-1; i++)
 	{
 		for (int j = i + 1; j < m.length(); j++)
@@ -37,7 +36,6 @@ void SWAPSORT(std::string m) // add & ??
 			}
 		}			
 	}	
-//	k = m;
 }
 bool isVowels(std::string m, std::string n)
 {
