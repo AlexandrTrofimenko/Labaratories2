@@ -41,7 +41,7 @@ bool isVowels(std::string& m, std::string& n)
 {
 	for (int i = 0; i < m.length(); i++)
 	{
-		for (int j = i; j < n.length(); j++)
+		for (int j = 0; j < n.length(); j++)
 		{
 			if (m[i] == n[j])
 			{
