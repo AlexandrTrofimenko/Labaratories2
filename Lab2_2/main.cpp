@@ -1,13 +1,17 @@
+//Реализуйте алгоритм быстрой сортировки по его псевдокоду. Реализуйте алгоритм сортировки пузырьком из лекции 1. 
+//Исследуйте при помощи класса Timer время выполнения на разных объемах входных данных
+//(n = 10, n = 100, n = 100 000, n = 1 000 000).
+//Объясните полученный результат.
 #include <iostream>
 #include <chrono>
-#define N 10000
+#define N 10
 void QuickSort(int a, int b, int* x)
 {
 	if (a >= b)
 	{
 		return;
 	}
-	int m = ((rand() * rand()) % (b - a + 1)) + a;
+	int m = ((a+b)/2)+1;
 	int k = x[m];
 	int l = a - 1;
 	int r = b + 1;
@@ -23,7 +27,6 @@ void QuickSort(int a, int b, int* x)
 			r--;
 		}
 		while (x[r] > k);
-
 		if (l >= r)
 		{
 			break;
@@ -37,17 +40,20 @@ void QuickSort(int a, int b, int* x)
 }
 void BUBBLESORT(int* mas, int n)
 {
-	for (int i = 1; i < n; i++)
+	bool fl = false;
+	for (int i = 1; i < n-1; i++)
 	{
-		if (mas[i] >= mas[i - 1])
+		for (int j = 0; j < n - 1 - i; j++)
 		{
-			continue;
+			if (mas[j] > mas[j + 1])
+			{
+				std::swap(mas[j], mas[j + 1]);
+				fl = true;
+			}
 		}
-		int j = i - 1;
-		while (j >= 0 && mas[j] > mas[j + 1])
+		if (fl == false)
 		{
-			std::swap(mas[j], mas[j + 1]);
-			j--;
+			break;
 		}
 	}
 }
@@ -90,8 +96,8 @@ int main()
 	}*/
 	std::cout << std::endl;
 	Timer a;
-	QuickSort(0, N - 1, mas1);
-	std::cout << "Time elapsed: " << a.elapsed() << std::endl;
+	QuickSort(1, N - 1, mas1);
+	std::cout << "Time elapsed quicksort: " << a.elapsed() << std::endl;
 /*	for (int i = 0; i < N; i++)
 	{
 		std::cout << mas1[i] << " ";
@@ -99,7 +105,7 @@ int main()
 	std::cout << std::endl;
 	Timer b;
 	BUBBLESORT(mas2, N);
-	std::cout << "Time elapsed: " << a.elapsed() << std::endl;
+	std::cout << "Time elapsed bubblesort: " << b.elapsed() << std::endl;
 /*	for (int i = 0; i < N; i++)
 	{
 		std::cout << mas2[i] << " ";
