@@ -3,10 +3,16 @@
 2.Найдите корень уравнения ln x – 1 = 0 с точностью до 10^-4 с помощью бисекции.
 */
 #include <iostream>
+<<<<<<< HEAD
 #include <cmath>
 double f(double a)
 {
 	return log(a)-1;
+=======
+double f(double a)
+{
+	return a - 10;
+>>>>>>> main
 }
 double bisection(double a,double b,double j)
 {
@@ -27,6 +33,7 @@ double bisection(double a,double b,double j)
 			b = x;
 		}
 	}
+<<<<<<< HEAD
 }
 int main()
 {
@@ -35,4 +42,6 @@ int main()
 	double result = bisection(0, 10, eps);
 	std::cout << "x = " << result;
 	return 0;
+=======
+>>>>>>> main
 }
