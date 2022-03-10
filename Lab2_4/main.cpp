@@ -82,7 +82,6 @@ void SWAPSORT(T_List* head)
 {
 	//for(int i=0;i<n-1;i++)
 	//	for(int j=i+1;j<n;j++)
-
 	T_List* p = head->next;
 	while (p->next->next != nullptr)
 	{
@@ -96,13 +95,29 @@ void SWAPSORT(T_List* head)
 		p = p->next;
 	}
 }
-
 void FIND(T_List* head)
 {
+	T_List* p = head;
+	if (p->next)
+	{
 
+	}
 }
 int main()
 {
+	srand(time(NULL));
+	T_List* head = new T_List;
+	head->next = nullptr;
+	int N = 10000;
+	int M = 1000;
+	int k = rand();
+	for (int i = 0; i < N; i++)
+	{
+		ADD(head, rand() % 10);
+	}
+	PRINT(head);
+	CLEAR(head);
+	delete head;
 
 	return 0;
 }
