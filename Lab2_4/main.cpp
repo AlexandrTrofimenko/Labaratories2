@@ -95,14 +95,7 @@ void SWAPSORT(T_List* head)
 		p = p->next;
 	}
 }
-void FIND(T_List* head)
-{
-	T_List* p = head;
-	if (p->next)
-	{
 
-	}
-}
 int main()
 {
 	srand(time(NULL));
@@ -115,9 +108,9 @@ int main()
 	{
 		ADD(head, rand() % 10);
 	}
-	PRINT(head);
+//	PRINT(head);
 	CLEAR(head);
-	delete head;
+	delete head;	
 
 	return 0;
 }
