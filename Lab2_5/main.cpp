@@ -3,13 +3,14 @@
 
 struct Elem
 {
-    int data;          
+    int data;          // Данные 
+    // Указатели на соседние вершины
     Elem* left;
     Elem* right;
     Elem* parent;
 };
 
-  
+// Инициализация корня 
 Elem* MAKE(int data, Elem* p)
 {
     Elem* q = new Elem;        
@@ -20,7 +21,7 @@ Elem* MAKE(int data, Elem* p)
     return q;
 }
 
-  
+// Добавление элемента
 void ADD(int data, Elem*& root)
 {
     if (root == nullptr) {
@@ -42,7 +43,7 @@ void ADD(int data, Elem*& root)
         v->right = u;
 }
 
-  
+// Обход дерева
 void PASS(Elem* v)
 {
     if (v == nullptr)
@@ -58,7 +59,7 @@ void PASS(Elem* v)
      
 }
 
-Elem* SEARCH(int data, Elem* v)    
+Elem* SEARCH(int data, Elem* v)     // v - элемент, с которого начинаем поиск
 {
     if (v == nullptr)
         return v;
