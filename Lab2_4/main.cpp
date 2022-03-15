@@ -5,12 +5,35 @@
 Реализуйте такую же операцию для массива. Сравните производительность
 */
 #include <iostream>
+#include <chrono>
+class Timer
+{
+private:
+	using clock_t = std::chrono::high_resolution_clock;
+	using second_t = std::chrono::duration<double, std::ratio<1> >;
+
+	std::chrono::time_point<clock_t> m_beg;
+
+public:
+	Timer() : m_beg(clock_t::now())
+	{
+	}
+
+	void reset()
+	{
+		m_beg = clock_t::now();
+	}
+
+	double elapsed() const
+	{
+		return std::chrono::duration_cast<second_t>(clock_t::now() - m_beg).count();
+	}
+};
 struct T_List
 {
-	T_List* next;
-	int elements;
+	T_List* next;   // указатель 
+	int elements; // элементы, входящие в список
 };
-
 void ADD(T_List* head, int elements)
 {
 	T_List* p = new T_List;
@@ -39,7 +62,6 @@ void CLEAR(T_List* head)
 		delete tmp;
 	}
 }
-
 bool FIND(T_List* head,int x)
 {
 	T_List* p = head->next;
@@ -54,32 +76,66 @@ bool FIND(T_List* head,int x)
 			p = p->next;
 		}
 	}
+	return false;
 }
 int main()
 {
 	setlocale(LC_ALL, "Rus");
 	srand(time(NULL));
-	T_List* head = new T_List;
-	head->next = nullptr;
+	T_List* head = new T_List; // начало списка ... (головной элемент?)
+	head->next = nullptr; // на что ссылается ( указывает на 0) 
 	int N = 10000;
 	int M = 1000;
-//	int k = rand();
-	int x = 0;
+	int* x = new int[M];
 	for (int i = 0; i < N; i++)
 	{
-		ADD(head, rand() %10);
+		ADD(head, rand() % 10);
 	}
-//	PRINT(head);
-	std::cin >> x;
-	if (FIND(head,x) == true)
+	//	PRINT(head);
+	for (int i = 0; i < M; i++)
 	{
-		std::cout << x << "-найден" << std::endl;
+		x[i] = rand() % 10;
 	}
-	else
+	Timer a;
+	for (int i = 0; i < M; i++)
 	{
-		std::cout << x << "-не найден" << std::endl;
-	}
+		if (FIND(head, x[i]) == true)
+		{
+			std::cout << x[i] << "-найден" << " time - " << a.elapsed() << std::endl;
+			
+		}
+		else
+		{
+			std::cout << x[i] << "-не найден" << " time - " << a.elapsed() << std::endl;
+			
+		}
+    }
 	CLEAR(head);
 	delete head;
+	std::cout << std::endl;
+	int* mass = new int[N];
+	for (int i = 0; i < N; i++)
+	{
+		mass[i] = rand() % 10;
+	}
+	Timer b;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			if (mass[i] == x[j])
+			{
+				std::cout << x[j]<< "-найден" << " time mass - " << b.elapsed() << std::endl;
+				
+			}
+			else
+			{
+				std::cout << x[j] << "-не найден" << " time mass- " << b.elapsed() << std::endl;
+				
+			}
+		}
+	}
+	delete[] mass;
+	delete[] x;
 	return 0;
 }
