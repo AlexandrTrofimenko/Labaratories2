@@ -86,6 +86,7 @@ int main()
 	head->next = nullptr; // на что ссылается ( указывает на 0) 
 	int N = 10000;
 	int M = 1000;
+	
 	int* x = new int[M];
 	for (int i = 0; i < N; i++)
 	{
@@ -101,15 +102,16 @@ int main()
 	{
 		if (FIND(head, x[i]) == true)
 		{
-			std::cout << x[i] << "-найден" << " time - " << a.elapsed() << std::endl;
+			//std::cout << x[i] << "-найден" << std::endl;
 			
 		}
 		else
 		{
-			std::cout << x[i] << "-не найден" << " time - " << a.elapsed() << std::endl;
+			//std::cout << x[i] << "-не найден" << std::endl;
 			
 		}
     }
+	std::cout << a.elapsed()<< std::endl;
 	CLEAR(head);
 	delete head;
 	std::cout << std::endl;
@@ -125,16 +127,15 @@ int main()
 		{
 			if (mass[i] == x[j])
 			{
-				std::cout << x[j]<< "-найден" << " time mass - " << b.elapsed() << std::endl;
-				
+				//std::cout << x[j]<< "-найден"  << std::endl;
 			}
 			else
 			{
-				std::cout << x[j] << "-не найден" << " time mass- " << b.elapsed() << std::endl;
-				
+				//std::cout << x[j] << "-не найден"  << std::endl;
 			}
 		}
 	}
+	std::cout << b.elapsed() << std::endl;
 	delete[] mass;
 	delete[] x;
 	return 0;

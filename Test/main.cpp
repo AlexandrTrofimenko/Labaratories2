@@ -48,14 +48,11 @@ void PASS(Elem* v)
 {
     if (v == nullptr)
         return;
-    
+    std::cout << v->data <<std::endl;
 
     PASS(v->left);
-   
-    std::cout << v->data << std::endl;
 
     PASS(v->right);
-
      
 }
 
@@ -163,7 +160,7 @@ int main()
     std::ifstream in("input.txt");
     char a;
     int b;
-    while (!in.eof())
+   /* while (!in.eof())
     {
         in >> a;
         in >> b;
@@ -184,6 +181,14 @@ int main()
         {
             break;
         }
-    }
+    }*/
+    ADD(8, root);
+    ADD(3, root);
+    ADD(7, root);
+    ADD(5, root);
+    ADD(2, root);
+    ADD(1, root);
+
+    PASS(root);
     return 0;
 }
