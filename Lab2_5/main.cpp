@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-
+#include <iomanip>
 struct Elem
 {
     int data;          // Данные 
@@ -44,19 +44,30 @@ void ADD(int data, Elem*& root)
 }
 
 // Обход дерева
-void PASS(Elem* v)
+void PASS(Elem* v,int indent)
 {
-    if (v == nullptr)
-        return;
+    if (v != nullptr)
+    {
+        if (v->right)
+        {
+            PASS(v->right, indent + 4);
+        }
+        if (indent)
+        {
+            std::cout << std::setw(indent) << ' ';
+        }
+        if (v->right)
+        {
+            std::cout << " /\n" << std::setw(indent) << ' ';
+        }
+        std::cout << v->data << "\n ";
+        if (v->left)
+        {
+            std::cout << std::setw(indent) << ' ' << " \\\n";
+            PASS(v->left, indent + 4);
+        }
+    }
     
-
-    PASS(v->left);
-   
-    std::cout << v->data << std::endl;
-
-    PASS(v->right);
-
-     
 }
 
 Elem* SEARCH(int data, Elem* v)     // v - элемент, с которого начинаем поиск
@@ -170,6 +181,8 @@ int main()
         if (a == '+')
         {
             ADD(b, root);
+            PASS(root, 2);
+            std::cout << "======" <<std::endl;
         }
         else if (a == '?')
         {
@@ -179,11 +192,15 @@ int main()
         else if (a == '-')
         {
             DELETE(b, root);
+            std::cout << "Deleting" <<std::endl;
+            PASS(root, 2);
+            std::cout << "Deleting" << std::endl;
         }
         else if (a == 'E')
         {
             break;
         }
     }
+    CLEAR(root);
     return 0;
 }
