@@ -56,8 +56,12 @@ public:
 		std::cout << "Operator+" << std::endl;
 		Matrix tmp(2, 3);
 		for (int i = 0; i < m_n; i++)
+		{
 			for (int j = 0; j < m_m; j++)
+			{
 				tmp.m_mat[i][j] = m_mat[i][j] + mat.m_mat[i][j];
+			}
+		}
 		return tmp;
 	}
 	friend std::istream& operator>>(std::istream& in, Matrix& mat);
