@@ -192,9 +192,9 @@ int main()
         else if (a == '-')
         {
             DELETE(b, root);
-            std::cout << "Deleting" <<std::endl;
-            PASS(root, 2);
-            std::cout << "Deleting" << std::endl;
+      //      std::cout << "Deleting" <<std::endl;
+    //        PASS(root, 2);
+  //          std::cout << "Deleting" << std::endl;
         }
         else if (a == 'E')
         {
