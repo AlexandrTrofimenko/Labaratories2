@@ -4,13 +4,13 @@ class Matrix
 public:
 	Matrix(int n, int m)
 	{
-		std::cout << "Constructor" << std::endl;
+		std::cout<< "Constructor" << std::endl;
 		m_n = n;
 		m_m = m;
-		m_mat = new int* [m_n];
+		m_mat = new double* [m_n];
 		for (int i = 0; i < m_n; i++)
 		{
-			m_mat[i] = new int[m_m];
+			m_mat[i] = new double[m_m];
 		}
 	}
 	/*	// конструктор копирования - запрет.
@@ -19,17 +19,17 @@ public:
 	// Конструктор копирования 
 	Matrix(const Matrix& mat)
 	{
-		std::cout << "Copy constructor" << std::endl;
+		std::cout<< "Copy constructor" << std::endl;
 		m_n = mat.m_n;
 		m_m = mat.m_m;
-		m_mat = new int* [m_n];
+		m_mat = new double* [m_n];
 		for (int i = 0; i < m_n; i++)
 		{
-			m_mat[i] = new int[m_m];
+			m_mat[i] = new double[m_m];
 		}
 		for (int i = 0; i < m_n; i++)
 		{
-			for (int j = 0; j < m_m; i++)
+			for (int j = 0; j < m_m; j++)
 			{
 				m_mat[i][j] = mat.m_mat[i][j];
 			}
@@ -38,7 +38,7 @@ public:
 	// Присваивание 
 	Matrix& operator=(const Matrix& mat)
 	{
-		std::cout << "Operator = " << std::endl;
+		std::cout<< "Operator = " << std::endl;
 		m_n = mat.m_n;
 		m_m = mat.m_m;
 		for (int i = 0; i < m_n; i++)
@@ -53,7 +53,7 @@ public:
 	// Оператор сложения
 	Matrix operator+(const Matrix& mat)
 	{
-		std::cout << "Operator+" << std::endl;
+		std::cout<< "Operator+" << std::endl;
 		Matrix tmp(2, 3);
 		for (int i = 0; i < m_n; i++)
 		{
@@ -64,21 +64,134 @@ public:
 		}
 		return tmp;
 	}
-	friend std::istream& operator>>(std::istream& in, Matrix& mat);
-	friend std::ostream& operator<<(std::ostream& out, const Matrix& mat);
+	// Оператор вычитания 
+	Matrix operator-(const Matrix& mat)
+	{
+		std::cout<< "Operator-" << std::endl;
+		Matrix tmp(2, 3);
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < m_m; j++)
+			{
+				tmp.m_mat[i][j] = m_mat[i][j] - mat.m_mat[i][j];
+			}
+		}
+		return tmp;
+	}
+	// Оператор умножения
+	Matrix operator*(const Matrix& mat)
+	{
+		std::cout<< "Operator*" << std::endl;
+		Matrix tmp(2, 2);
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < mat.m_m; j++)
+			{
+				tmp.m_mat[i][j] = 0;
+				for (int k = 0; k < m_m; k++)
+				{
+					tmp.m_mat[i][j] +=m_mat[i][k] * mat.m_mat[k][j];
+				}
+			}
+		}
+		return tmp;
+	}
+	// Нахождение определителя матрицы
+	int Matrix::Det()
+	{
+		if (m_n != m_m)
+		{
+			std::cout<< "Операция не поддерживается" << std::endl;
+			return -1;
+		}
+
+
+		if(m_n == 2 && m_m == 2)
+		{
+			std::cout<< "2x2" << std::endl;
+			return m_mat[0][0] * m_mat[1][1] - m_mat[0][1] * m_mat[1][0];
+		}
+		
+		if (m_n == 3 && m_m == 3)
+		{
+			std::cout<< "3x3" << std::endl;
+			return m_mat[0][0] * m_mat[1][1] * m_mat[2][2] + m_mat[0][1] * m_mat[1][2] * m_mat[2][0]
+				+ m_mat[1][0] * m_mat[2][1] * m_mat[0][2] - (m_mat[2][0] * m_mat[1][1] * m_mat[0][2] +
+					m_mat[2][1] * m_mat[1][2] * m_mat[0][0] + m_mat[1][0] * m_mat[0][1] * m_mat[2][2]);
+		}
+		
+	}
+	// Нахождение обратной матрицы
+	Matrix Matrix::inversion()
+	{
+		int Det1 = Det();
+		Matrix tmp(m_n, m_m);
+		if ((m_n == 2 && m_m == 2) || (m_n == 3 && m_m == 3)) 
+		{
+			if (Det1 == 0)
+			{
+				std::cout<< "Определитель равен нулю" << std::endl;
+			}
+			else
+			{
+				if (m_n == 2) 
+				{
+					tmp.m_mat[0][0] = m_mat[1][1] / Det1;
+					tmp.m_mat[0][1] = -m_mat[0][1] / Det1;
+					tmp.m_mat[1][0] = -m_mat[1][0] / Det1;
+					tmp.m_mat[1][1] = m_mat[0][0] / Det1;
+					return tmp;
+				}
+				if (m_n == 3) 
+				{
+					tmp.m_mat[0][0] = (m_mat[1][1] * m_mat[2][2] - m_mat[2][1] * m_mat[1][2]) / Det1;
+					tmp.m_mat[1][0] = -(m_mat[1][0] * m_mat[2][2] - m_mat[2][0] * m_mat[1][2]) / Det1;
+					tmp.m_mat[2][0] = (m_mat[1][0] * m_mat[2][1] - m_mat[2][0] * m_mat[1][1]) / Det1;
+					tmp.m_mat[0][1] = -(m_mat[0][1] * m_mat[2][2] - m_mat[2][1] * m_mat[0][2]) / Det1;
+					tmp.m_mat[1][1] = (m_mat[0][0] * m_mat[2][2] - m_mat[2][0] * m_mat[0][2]) / Det1;
+					tmp.m_mat[2][1] = -(m_mat[0][0] * m_mat[2][1] - m_mat[2][0] * m_mat[0][1]) / Det1;
+					tmp.m_mat[0][2] = (m_mat[0][1] * m_mat[1][2] - m_mat[1][1] * m_mat[0][2]) / Det1;
+					tmp.m_mat[1][2] = -(m_mat[0][0] * m_mat[1][2] - m_mat[1][0] * m_mat[0][2]) / Det1;
+					tmp.m_mat[2][2] = (m_mat[0][0] * m_mat[1][1] - m_mat[1][0] * m_mat[0][1]) / Det1;
+					return tmp;
+				}
+			}
+		}
+		else 
+		{
+			std::cout<< "Операция не поддерживается" << std::endl;
+		}
+	}	
+	// Транспонирование матрицы 
+	void Matrix::transposition()
+	{
+		for (int i = 0; i < m_m; i++)
+		{
+			for (int j = 0; j < m_n; j++)
+			{
+				m_mat[i][j] = m_mat[j][i];
+
+			}
+		}
+		int temp = m_n;
+		m_n = m_m;
+		m_m = temp;
+	}
 	// Деструктор
 	~Matrix()
 	{
-		std::cout << "Destructor" << std::endl;
+		std::cout<< "Destructor" << std::endl;
 		for (int i = 0; i < m_n; i++)
 		{
 			delete[] m_mat[i];
 		}
 		delete m_mat;
 	}
+	friend std::istream& operator>>(std::istream& in, Matrix& mat);
+	friend std::ostream& operator<<(std::ostream& out, const Matrix& mat);
 private:
 	int m_n, m_m;
-	int** m_mat;
+	double** m_mat;
 };
 std::istream& operator>>(std::istream& in, Matrix& mat)
 {
@@ -107,14 +220,19 @@ std::ostream& operator<<(std::ostream& out,const Matrix& mat)
 int main()
 {
 	setlocale(LC_ALL, "Rus");
-	Matrix A(2, 3);
+	int i = 0;
+	int j = 0;
+	std::cout<< "Введите кол-во строк матрицы " << std::endl;
+	std::cin >> i;
+	std::cout<< "Введите кол-во столбцов матрицы " << std::endl;
+	std::cin >> j;
+	Matrix A(i, j);
+	std::cout<< "Введите элементы матрицы A" << std::endl;
 	std::cin >> A;
-	std::cout << A << std::endl;
-	Matrix B(2, 3);
-	std::cin >> B;
-	std::cout << B << std::endl;
-	Matrix C(2, 3);
-	C = A + B;
-	std::cout << C << std::endl;
+	std::cout<< A;
+	A.transposition();
+	std::cout<< A << std::endl;
+	//std::cout<< A.transposition(i,j) << std::endl;
+
 	return 0;
 }
