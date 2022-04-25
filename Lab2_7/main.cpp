@@ -163,19 +163,38 @@ public:
 		}
 	}	
 	// Транспонирование матрицы 
-	void Matrix::transposition()
+	Matrix Matrix::transposition()
 	{
-		for (int i = 0; i < m_m; i++)
+		Matrix tmp(m_n, m_m);
+		if (m_m == m_n)
 		{
-			for (int j = 0; j < m_n; j++)
+			for (int i = 0; i < m_n; i++)
 			{
-				m_mat[i][j] = m_mat[j][i];
+				for (int j = 0; j < m_m; j++)
+				{
+					tmp.m_mat[i][j] = m_mat[j][i];
 
+				}
+			}
+			int temp = m_n;
+			m_n = m_m;
+			m_m = temp;
+		}
+		else
+		{
+			int temp = m_n;
+			m_n = m_m;
+			m_m = temp;
+			for (int i = 0; i < m_m; i++)
+			{
+				for (int j = 0; j < m_n; j++)
+				{
+					tmp.m_mat[i][j] = m_mat[j][i];
+
+				}
 			}
 		}
-		int temp = m_n;
-		m_n = m_m;
-		m_m = temp;
+		return tmp;
 	}
 	// Деструктор
 	~Matrix()
@@ -229,10 +248,8 @@ int main()
 	Matrix A(i, j);
 	std::cout<< "Введите элементы матрицы A" << std::endl;
 	std::cin >> A;
-	std::cout<< A;
-	A.transposition();
-	std::cout<< A << std::endl;
-	//std::cout<< A.transposition(i,j) << std::endl;
-
+	std::cout << A;
+	std::cout << A.transposition() << std::endl;
+	std::cout << A.transposition() << std::endl;
 	return 0;
 }
