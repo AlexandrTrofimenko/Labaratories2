@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 class Matrix
 {
 public:
@@ -99,7 +100,7 @@ public:
 	// Нахождение определителя матрицы
 	int Matrix::Det()
 	{
-		if (m_n != m_m)
+		if ((m_n != m_m) || m_n > 3 || m_m>3)
 		{
 			std::cout<< "Операция не поддерживается" << std::endl;
 			return -1;
@@ -118,8 +119,7 @@ public:
 			return m_mat[0][0] * m_mat[1][1] * m_mat[2][2] + m_mat[0][1] * m_mat[1][2] * m_mat[2][0]
 				+ m_mat[1][0] * m_mat[2][1] * m_mat[0][2] - (m_mat[2][0] * m_mat[1][1] * m_mat[0][2] +
 					m_mat[2][1] * m_mat[1][2] * m_mat[0][0] + m_mat[1][0] * m_mat[0][1] * m_mat[2][2]);
-		}
-		
+		}		
 	}
 	// Нахождение обратной матрицы
 	Matrix Matrix::inversion()
@@ -162,39 +162,58 @@ public:
 			std::cout<< "Операция не поддерживается" << std::endl;
 		}
 	}	
+
 	// Транспонирование матрицы 
-	Matrix Matrix::transposition()
+	void Matrix::transposition()
 	{
-		Matrix tmp(m_n, m_m);
-		if (m_m == m_n)
-		{
+		/*	std::swap(m_m, m_n);
+			Matrix tmp(m_n, m_m);
 			for (int i = 0; i < m_n; i++)
 			{
 				for (int j = 0; j < m_m; j++)
 				{
 					tmp.m_mat[i][j] = m_mat[j][i];
-
 				}
 			}
-			int temp = m_n;
-			m_n = m_m;
-			m_m = temp;
-		}
-		else
-		{
-			int temp = m_n;
-			m_n = m_m;
-			m_m = temp;
 			for (int i = 0; i < m_m; i++)
 			{
-				for (int j = 0; j < m_n; j++)
+				delete[] m_mat[i];
+			}
+			delete m_mat;
+			m_mat = new double* [m_n];
+			for (int i = 0; i < m_n; i++)
+			{
+				m_mat[i] = new double[m_m];
+			}
+			for (int i = 0; i < m_n; i++)
+			{
+				for (int j = 0; j < m_m; j++)
 				{
-					tmp.m_mat[i][j] = m_mat[j][i];
-
+					m_mat[i][j] = tmp.m_mat[i][j];
 				}
 			}
+			return tmp;*/
+		std::swap(m_n, m_m);
+		Matrix tmp(m_n, m_m);
+		for (int i = 0; i < m_n; i++)
+		{
+			for (int j = 0; j < m_m; j++) 
+			{
+				tmp.m_mat[i][j] = m_mat[j][i];
+			}
 		}
-		return tmp;
+		m_mat = (double**)malloc(m_n * sizeof(double*));
+		for (int i = 0; i < m_n; i++)
+		{
+			m_mat[i] = (double*)malloc(m_m * sizeof(double));
+		}
+		for (int i = 0; i < m_n; i++) 
+		{
+			for (int j = 0; j < m_m; j++) 
+			{
+				m_mat[i][j] = tmp.m_mat[i][j];
+			}
+		}
 	}
 	// Деструктор
 	~Matrix()
@@ -249,7 +268,9 @@ int main()
 	std::cout<< "Введите элементы матрицы A" << std::endl;
 	std::cin >> A;
 	std::cout << A;
-	std::cout << A.transposition() << std::endl;
-	std::cout << A.transposition() << std::endl;
+	A.transposition();
+	std::cout << A;
+	A.transposition();
+	std::cout << A;
 	return 0;
 }
