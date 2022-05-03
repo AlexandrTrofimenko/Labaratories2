@@ -55,7 +55,7 @@ public:
 	Matrix operator+(const Matrix& mat)
 	{
 		std::cout<< "Operator+" << std::endl;
-		Matrix tmp(2, 3);
+		Matrix tmp(m_n, m_m);
 		for (int i = 0; i < m_n; i++)
 		{
 			for (int j = 0; j < m_m; j++)
@@ -69,7 +69,7 @@ public:
 	Matrix operator-(const Matrix& mat)
 	{
 		std::cout<< "Operator-" << std::endl;
-		Matrix tmp(2, 3);
+		Matrix tmp(m_n, m_m);
 		for (int i = 0; i < m_n; i++)
 		{
 			for (int j = 0; j < m_m; j++)
@@ -83,7 +83,7 @@ public:
 	Matrix operator*(const Matrix& mat)
 	{
 		std::cout<< "Operator*" << std::endl;
-		Matrix tmp(2, 2);
+		Matrix tmp(m_n, m_m);
 		for (int i = 0; i < m_n; i++)
 		{
 			for (int j = 0; j < mat.m_m; j++)

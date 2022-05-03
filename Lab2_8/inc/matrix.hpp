@@ -1,11 +1,10 @@
 #pragma once
 #include <iostream>
+// MY_DEBUG определена
+//#define MY_DEBUG 
 
 namespace mt::math
 {
-		// MY_DEBUG определена
-		//#define MY_DEBUG 
-
 		template<typename T, int N, int M>
 		struct MasWrapper
 		{
@@ -131,9 +130,26 @@ namespace mt::math
 			// Расчет определителя
 			T det()
 			{
-				T result = 0;  // подсчет определителя
+				if ((N != M) || m_n > 3 || m_m > 3)
+				{
+					std::cout << "Операция не поддерживается" << std::endl;
+					return -1;
+				}
 
-				return result;
+
+				if (N == 2 && M == 2)
+				{
+					std::cout << "2x2" << std::endl;
+					return  m_mat[0][0] * m_mat[1][1] - m_mat[0][1] * m_mat[1][0];
+				}
+
+				if (N == 3 && M == 3)
+				{
+					std::cout << "3x3" << std::endl;
+					return m_mat[0][0] * m_mat[1][1] * m_mat[2][2] + m_mat[0][1] * m_mat[1][2] * m_mat[2][0]
+						+ m_mat[1][0] * m_mat[2][1] * m_mat[0][2] - (m_mat[2][0] * m_mat[1][1] * m_mat[0][2] +
+							m_mat[2][1] * m_mat[1][2] * m_mat[0][0] + m_mat[1][0] * m_mat[0][1] * m_mat[2][2]);
+				}
 			}
 
 			// Обратная матрица
@@ -145,15 +161,59 @@ namespace mt::math
 				int d = det();
 				if (d == 0)
 					throw std::exception("Zero determinant!");
-
 				std::cout << "After throw exception in inv function!" << std::endl;
-
-				m_mat[0][0] / d;
+				if ((m_n == 2 && m_m == 2) || (m_n == 3 && m_m == 3))
+				{
+					if (d == 0)
+					{
+						std::cout << "Определитель равен нулю" << std::endl;
+					}
+					else
+					{
+						if (m_n == 2)
+						{
+							tmp.m_mat[0][0] = m_mat[1][1] / d;
+							tmp.m_mat[0][1] = -m_mat[0][1] / d;
+							tmp.m_mat[1][0] = -m_mat[1][0] / d;
+							tmp.m_mat[1][1] = m_mat[0][0] / d;
+							return tmp;
+						}
+						if (m_n == 3)
+						{
+							tmp.m_mat[0][0] = (m_mat[1][1] * m_mat[2][2] - m_mat[2][1] * m_mat[1][2]) / d;
+							tmp.m_mat[1][0] = -(m_mat[1][0] * m_mat[2][2] - m_mat[2][0] * m_mat[1][2]) / d;
+							tmp.m_mat[2][0] = (m_mat[1][0] * m_mat[2][1] - m_mat[2][0] * m_mat[1][1]) / d;
+							tmp.m_mat[0][1] = -(m_mat[0][1] * m_mat[2][2] - m_mat[2][1] * m_mat[0][2]) / d;
+							tmp.m_mat[1][1] = (m_mat[0][0] * m_mat[2][2] - m_mat[2][0] * m_mat[0][2]) / d;
+							tmp.m_mat[2][1] = -(m_mat[0][0] * m_mat[2][1] - m_mat[2][0] * m_mat[0][1]) / d;
+							tmp.m_mat[0][2] = (m_mat[0][1] * m_mat[1][2] - m_mat[1][1] * m_mat[0][2]) / d;
+							tmp.m_mat[1][2] = -(m_mat[0][0] * m_mat[1][2] - m_mat[1][0] * m_mat[0][2]) / d;
+							tmp.m_mat[2][2] = (m_mat[0][0] * m_mat[1][1] - m_mat[1][0] * m_mat[0][1]) / d;
+							return tmp;
+						}
+					}
+				}
+				else
+				{
+					std::cout << "Операция не поддерживается" << std::endl;
+				}
 
 
 				return tmp;
 			}
-
+			Matrix<T,N,M> transposition()
+			{
+				std::swap(m_n, m_m);
+				Matrix<T, N, M> tmp;
+				for (int i = 0; i < m_n; i++)
+				{
+					for (int j = 0; j < m_m; j++)
+					{
+						tmp.m_mat[i][j] = m_mat[j][i];
+					}
+				}
+				return tmp;
+			}
 			// Деструктор
 			~Matrix()
 			{

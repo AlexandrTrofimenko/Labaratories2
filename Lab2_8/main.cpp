@@ -4,12 +4,13 @@
 
 using mt::math::Mat22d;
 using mt::math::Vec2d;
+using mt::math::Mat22i;
 
 
 
 int main()
 {
-	std::cout << "=== Test 0 ===" << std::endl;
+/*	std::cout << "=== Test 0 ===" << std::endl;
 	{
 		Mat22d A({ {
 			 {1,2},
@@ -72,7 +73,32 @@ int main()
 		assert(B.get(1, 0) == 2);
 	}
 
-	std::cout << "Done!" << std::endl;
+	std::cout << "Done!" << std::endl;*/
+/*	std::cout << "===Test3===" << std::endl;
+	{	Mat22i A({ {
+				 {3,2},
+				 {1,4}
+				} });
+		std::cout << A << std::endl;
+		std::cout << A.det();
+		assert(A.det() == 10);
+	} */
+	/*std::cout << "====Test4====" << std::endl;
+	{	Mat22d A({ {
+				 {1,2},
+				 {3,4}
+				} });
+		std::cout << A << std::endl;
+		std::cout << A.inv();
+		assert(A.inv().get(0, 0) == -2);
+	} */
+	std::cout << "====Test5====" << std::endl;
+	Mat22d A({ {
+				 {1,2},
+				 {3,4}
+				} });
+	std::cout << A << std::endl;
+	std::cout << A.transposition();
 
 	return 0;
 }
