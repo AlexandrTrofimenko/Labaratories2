@@ -10,7 +10,6 @@ namespace mt::math
 		{
 			T mas[N][M];
 		};
-
 		template<typename T, int N, int M>
 		class Matrix
 		{
@@ -128,9 +127,10 @@ namespace mt::math
 			}
 
 			// Расчет определителя
-			T det()
+//			template<typename T, int N, int M>
+			T det() 
 			{
-				if ((N != M) || m_n > 3 || m_m > 3)
+				if ((N != M) || N > 3 || M > 3)
 				{
 					std::cout << "Операция не поддерживается" << std::endl;
 					return -1;
@@ -203,11 +203,11 @@ namespace mt::math
 			}
 			Matrix<T,N,M> transposition()
 			{
-				std::swap(m_n, m_m);
+				std::swap(N, M);
 				Matrix<T, N, M> tmp;
-				for (int i = 0; i < m_n; i++)
+				for (int i = 0; i < N; i++)
 				{
-					for (int j = 0; j < m_m; j++)
+					for (int j = 0; j < M; j++)
 					{
 						tmp.m_mat[i][j] = m_mat[j][i];
 					}
@@ -261,4 +261,6 @@ namespace mt::math
 		using Vec2d = Matrix<double, 2, 1>;
 		using Mat22i = Matrix<int, 2, 2>;
 		using Mat22d = Matrix<double, 2, 2>;
+		using Mat33i = Matrix<int, 3, 3>;
+		using Mat33d = Matrix<double,3,3>;
 }
