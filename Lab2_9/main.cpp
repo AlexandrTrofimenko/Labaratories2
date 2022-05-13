@@ -31,16 +31,16 @@ int main()
             }
     }
 
-    // pixels
+
     for (int i = 0; i < bmpInfo.Height; i++)
         for (int j = 0; j < bmpInfo.Width; j++)
         {
-            if(pixels[i][j].b - 50 > 0)
-                pixels[i][j].b -= 50;
+            if(pixels[i][j].r - 50 > 0)
+                pixels[i][j].r -= 150;
             if (pixels[i][j].g - 50 > 0)
-                pixels[i][j].g -= 50;
-            if (pixels[i][j].r - 50 > 0)
-                pixels[i][j].r -= 50;
+                pixels[i][j].g -= 207;
+            if (pixels[i][j].b - 50 > 0)
+                pixels[i][j].b -= 111;
         }
 
 
