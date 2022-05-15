@@ -207,16 +207,15 @@ namespace mt::images
     {
         // 1. Смещение центра координат
         Vec2d T({ {
-            {(double)(m_width / 2)},
-            {(double)(m_height / 2)}
-        } });
+               {(double)(m_width / 2)},
+               {(double)(m_height / 2)}
+           } });
 
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++)
                 m_coordinates[i][j] = m_coordinates[i][j] - T;
-        
 
-        // 2. Поворот
+        // 2. 
         Mat22d R({ {
             {cos(angle), sin(angle)},
             {-sin(angle), cos(angle)}
@@ -229,7 +228,7 @@ namespace mt::images
                 //std::cout << m_coordinates[i][j] << std::endl;
             }
 
-        // 3. Перенос цветов в новый массив пикселей
+        // 3.      
         int maxX = INT_MIN;
         int minX = INT_MAX;
         int maxY = INT_MIN;
@@ -247,7 +246,7 @@ namespace mt::images
                     minY = m_coordinates[i][j].get(1, 0);
             }
 
-        // Позволит не выйти за границы массива из-за ошибок округления
+        //       -  
         maxX++;
         minX--;
         maxY++;
@@ -256,17 +255,20 @@ namespace mt::images
         int width = maxX - minX;
         int height = maxY - minY;
 
-        // Переход к новой системе координат
+        //     
         Vec2d shift({ {
-            {(double)(width/2)},
-            {(double)(height/2)}
+            {(double)(width / 2)},
+            {(double)(height / 2)}
         } });
-
+        Vec2d test({ {
+            {(double)(-1)},
+            {(double)(-1)}
+        } });
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++)
                 m_coordinates[i][j] = m_coordinates[i][j] + shift;
 
-        // Создание нового массива
+        //   
         Pixel** new_pixels = new Pixel * [height];
         for (int i = 0; i < height; i++)
             new_pixels[i] = new Pixel[width];
@@ -274,28 +276,30 @@ namespace mt::images
         Vec2d** new_coordinates = new Vec2d * [height];
         for (int i = 0; i < height; i++)
             new_coordinates[i] = new Vec2d[width];
-
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                new_coordinates[i][j] = test;
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
                 new_pixels[i][j] = { 0,0,0 };
 
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-            {
-                new_coordinates[i][j].set(0, 0, j);
-                new_coordinates[i][j].set(0, 0, i);
-            }
 
-        // Копирование цвета
+
+        //  
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++)
             {
-                int x = (int)(m_coordinates[i][j].get(0, 0));
-                int y = (int)(m_coordinates[i][j].get(1, 0));;
-                new_pixels[y][x] = m_pixels[i][j];
+                if (m_coordinates[i][j].get(0, 0) >= 0)
+                {
+                    int x = (int)(m_coordinates[i][j].get(0, 0));
+                    int y = (int)(m_coordinates[i][j].get(1, 0));
+                    new_pixels[y][x] = m_pixels[i][j];
+
+                    new_coordinates[y][x].set(0, 0, (int)(m_coordinates[i][j].get(0, 0)));
+                    new_coordinates[y][x].set(1, 0, (int)(m_coordinates[i][j].get(1, 0)));
+                }
             }
 
-        // Удаление старого массива
         for (int i = 0; i < m_height; i++)
             delete[] m_pixels[i];
         delete[] m_pixels;
@@ -310,6 +314,79 @@ namespace mt::images
         m_width = width;
         m_height = height;
     }
+    void BMP::Repair()
+    {
+        for (int i = 0; i < m_height-1; i++)
+            for (int j = 0; j < m_width - 1; j++)
+            {
+                int summ_g = 0;
+                int summ_b = 0;
+                int summ_r = 0;
+                int k = 0;
+                if (m_coordinates[i][j].get(0, 0) == -1)
+                {
+                    if (i + 1 <= m_height)
+                    {
+                        summ_b += (int)m_pixels[i + 1][j].b;
+                        summ_g += (int)m_pixels[i + 1][j].g;
+                        summ_r += (int)m_pixels[i + 1][j].r;
+                        k += 1;
+                    }
+                    if (i - 1 >= 0)
+                    {
+                        summ_b += (int)m_pixels[i - 1][j].b;
+                        summ_r += (int)m_pixels[i - 1][j].r;
+                        summ_g += (int)m_pixels[i - 1][j].g;
+                        k += 1;
+                    }
+                    if (j + 1 <= m_width)
+                    {
+                        summ_b += (int)m_pixels[i][j + 1].b;
+                        summ_r += (int)m_pixels[i][j + 1].r;
+                        summ_g += (int)m_pixels[i][j + 1].g;
+                        k += 1;
+                    }
+                    if (j - 1 >= 0)
+                    {
+                        summ_b += (int)m_pixels[i][j - 1].b;
+                        summ_r += (int)m_pixels[i][j - 1].r;
+                        summ_g += (int)m_pixels[i][j - 1].g;
+                        k += 1;
+                    }
+                    if ((i + 1 <= m_height) && (j + 1 <= m_width))
+                    {
+                        summ_b += (int)m_pixels[i + 1][j + 1].b;
+                        summ_r += (int)m_pixels[i + 1][j + 1].r;
+                        summ_g += (int)m_pixels[i + 1][j + 1].g;
+                        k += 1;
+                    }
+                    if ((i - 1 >= 0) && (j + 1 <= m_width))
+                    {
+                        summ_b += (int)m_pixels[i - 1][j + 1].b;
+                        summ_r += (int)m_pixels[i - 1][j + 1].r;
+                        summ_g += (int)m_pixels[i - 1][j + 1].g;
+                        k += 1;
+                    }
+                    if ((i + 1 <= m_height) && (j - 1 >= 0))
+                    {
+                        summ_b += (int)m_pixels[i + 1][j - 1].b;
+                        summ_r += (int)m_pixels[i + 1][j - 1].r;
+                        summ_g += (int)m_pixels[i + 1][j - 1].g;
+                        k += 1;
+                    }
+                    if ((i - 1 >= 0) && (j - 1 >= 0))
+                    {
+                        summ_b += (int)m_pixels[i - 1][j - 1].b;
+                        summ_r += (int)m_pixels[i - 1][j - 1].r;
+                        summ_g += (int)m_pixels[i - 1][j - 1].g;
+                        k += 1;
+                    }
 
+                    m_pixels[i][j].b = unsigned char(summ_b / k);
+                    m_pixels[i][j].r = unsigned char(summ_r / k);
+                    m_pixels[i][j].g = unsigned char(summ_g / k);
+                }
+            }
+    }
 }
 
