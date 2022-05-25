@@ -6,7 +6,7 @@
 using mt::math::Vec2d;
 using mt::math::Mat22d;
 
-namespace mt::images
+namespace images
 {
 
 	#pragma pack(1)

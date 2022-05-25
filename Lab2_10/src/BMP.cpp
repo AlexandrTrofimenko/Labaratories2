@@ -1,12 +1,10 @@
 #include <BMP.hpp>
 
-namespace mt::images
+namespace images
 {
 
     BMP::BMP()
     {
-        m_width = 0;
-        m_height = 0;
     }
 
     BMP::BMP(int width, int height)
@@ -97,28 +95,14 @@ namespace mt::images
                 m_pixels[i][j] = pixel;
     }
 
-    void BMP::Brightness()
-    {
-        for (int i = 0; i < m_height; i++)
-            for (int j = 0; j < m_width; j++)
-            {
-                if (m_pixels[i][j].b + 50 < 256)
-                    m_pixels[i][j].b += 50;
-                if (m_pixels[i][j].g + 50 < 256)
-                    m_pixels[i][j].g += 50;
-                if (m_pixels[i][j].r + 50 < 256)
-                    m_pixels[i][j].r += 50;
-            }
-    }
-
     // TODO
     void BMP::Open(const std::string& filename)
     {
-        // Чтение файла
-        std::ifstream in(filename, std::ios::binary); // открыть файл для бинарного чтения
+        //  
+        std::ifstream in(filename, std::ios::binary); //     
 
         BMPHEADER bmpHeader;
-        // Считать 14 байтов побайтово и заполнить структуру BMPHEADER
+        //  14      BMPHEADER
         in.read(reinterpret_cast<char*>(&bmpHeader), sizeof(BMPHEADER));
 
         BMPINFO bmpInfo;
@@ -137,6 +121,9 @@ namespace mt::images
         m_pixels = new Pixel * [m_height];
         for (int i = 0; i < m_height; i++)
             m_pixels[i] = new Pixel[m_width];
+        m_coordinates = new Vec2d * [m_height];
+        for (int i = 0; i < m_height; i++)
+            m_coordinates[i] = new Vec2d[m_width];
 
         for (int i = 0; i < bmpInfo.Height; i++)
         {
@@ -150,6 +137,12 @@ namespace mt::images
                     in.read(&c, 1);
                 }
         }
+        for (int i = 0; i < m_height; i++)
+            for (int j = 0; j < m_width; j++)
+            {
+                m_coordinates[i][j].set(0, 0, j);
+                m_coordinates[i][j].set(1, 0, i);
+            }
     }
 
     void BMP::Save(const std::string& filename)
@@ -157,12 +150,12 @@ namespace mt::images
         if (m_width == 0 || m_height == 0)
             throw std::exception("Zero height or width");
 
-        // Записать файл
+        //  
         std::ofstream out(filename, std::ios::binary);
 
-        // Формирование заголовка
+        //  
         BMPHEADER bmpHeader_new;
-        bmpHeader_new.Type = 0x4D42; // Тип данных BMP
+        bmpHeader_new.Type = 0x4D42; //   BMP
         bmpHeader_new.Size = 14 + 40 + (3 * m_width * m_height);
         if (m_width % 4 != 0)
             bmpHeader_new.Size += (4 - (3 * m_width) % 4) * m_height;
@@ -172,7 +165,7 @@ namespace mt::images
 
         out.write(reinterpret_cast<char*>(&bmpHeader_new), sizeof(BMPHEADER));
 
-        // Формирование информации об изображении
+        //    
         BMPINFO bmpInfo_new;
         bmpInfo_new.BitCount = 24;
         bmpInfo_new.ClrImportant = 0;
@@ -188,7 +181,7 @@ namespace mt::images
 
         out.write(reinterpret_cast<char*>(&bmpInfo_new), sizeof(BMPINFO));
 
-        // Записать пиксели
+        //  
         for (int i = 0; i < bmpInfo_new.Height; i++)
         {
             for (int j = 0; j < bmpInfo_new.Width; j++)
@@ -202,14 +195,14 @@ namespace mt::images
                 }
         }
     }
-
     void BMP::Rotate(double angle)
     {
-        // 1. Смещение центра координат
+        // 1.   
+        angle = angle * acos(-1) / 180;
         Vec2d T({ {
-               {(double)(m_width / 2)},
-               {(double)(m_height / 2)}
-           } });
+            {(double)(m_width / 2)},
+            {(double)(m_height / 2)}
+        } });
 
         for (int i = 0; i < m_height; i++)
             for (int j = 0; j < m_width; j++)
@@ -281,7 +274,7 @@ namespace mt::images
                 new_coordinates[i][j] = test;
         for (int i = 0; i < height; i++)
             for (int j = 0; j < width; j++)
-                new_pixels[i][j] = { 0,0,0 };
+                new_pixels[i][j] = {0,0,0};
 
 
 
@@ -316,7 +309,7 @@ namespace mt::images
     }
     void BMP::Repair()
     {
-        for (int i = 0; i < m_height-1; i++)
+        for (int i = 0; i < m_height - 1; i++)
             for (int j = 0; j < m_width - 1; j++)
             {
                 int summ_g = 0;
@@ -331,6 +324,7 @@ namespace mt::images
                         summ_g += (int)m_pixels[i + 1][j].g;
                         summ_r += (int)m_pixels[i + 1][j].r;
                         k += 1;
+
                     }
                     if (i - 1 >= 0)
                     {
@@ -388,5 +382,5 @@ namespace mt::images
                 }
             }
     }
-}
 
+}
