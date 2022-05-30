@@ -5,11 +5,11 @@ int main()
 {
     try
     {
-        mt::images::BMP test_bmp(200, 100);
-        test_bmp.Fill({ 0,255,0 });
-        test_bmp.Rotate(acos(-1) / 4);
+        images::BMP test_bmp;
+        test_bmp.Open("in.bmp");
+        test_bmp.Rotate(11);
         test_bmp.Repair();
-        test_bmp.Save("test.bmp");
+        test_bmp.Save("in.bmp");
     }
     catch (const std::exception& e)
     {

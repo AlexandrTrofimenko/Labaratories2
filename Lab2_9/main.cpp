@@ -2,6 +2,19 @@
 #include <fstream>
 #include "inc/bmp.hpp"
 using namespace BMP;
+void Create()
+{
+    std::ifstream in("in.bmp", std::ios::binary);
+    BMPHEADER bmpHeader;
+    // Считать 14 байтов побайтово и заполнить структуру BMPHEADER
+    in.read(reinterpret_cast<char*>(&bmpHeader), sizeof(BMPHEADER));
+
+    BMPINFO bmpInfo;
+    in.read(reinterpret_cast<char*>(&bmpInfo), sizeof(BMPINFO));
+    Pixel** pixels = new Pixel * [bmpInfo.Height];
+    for (int i = 0; i < bmpInfo.Height; i++)
+        pixels[i] = new Pixel[bmpInfo.Width];
+}
 int main()
 {
     // Чтение файла
