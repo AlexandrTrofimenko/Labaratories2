@@ -1,149 +1,85 @@
-﻿// map::begin/end
-#include <iostream>
-#include <map>
-
-int main()
-{
-	std::map<char, int> mymap;
-
-	mymap['b'] = 100;
-	mymap['a'] = 200;
-	mymap['c'] = 300;
-
-	for (std::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
-		std::cout << it->first << " " << it->second << '\n';
-
-	return 0;
-}
-
-/*#include <iostream>
-#include <memory> // для std::shared_ptr
+﻿#include <iostream>
+#include <memory> 
 #include <string>
-
-#include <iostream>
-#include <memory> // для std::shared_ptr и std::weak_ptr
-#include <string>
-
-class Person
-{
-	std::string m_name;
-	std::weak_ptr<Person> m_partner; // обратите внимание: теперь это std::weak_ptr
-
-public:
-
-	Person(const std::string& name) : m_name(name)
-	{
-		std::cout << m_name << " created\n";
-	}
-	~Person()
-	{
-		std::cout << m_name << " destroyed\n";
-	}
-
-	friend bool partnerUp(std::shared_ptr<Person>& p1, std::shared_ptr<Person>& p2)
-	{
-		if (!p1 || !p2)
-			return false;
-
-		p1->m_partner = p2;
-		p2->m_partner = p1;
-
-		std::cout << p1->m_name << " is now partnered with " << p2->m_name << "\n";
-
-		return true;
-	}
-};
-
-int main()
-{
-	auto lucy{ std::make_shared<Person>("Lucy") };
-	auto ricky{ std::make_shared<Person>("Ricky") };
-
-	std::cout << lucy.use_count() << std::endl;
-	std::cout << ricky.use_count() << std::endl;
-
-	partnerUp(lucy, ricky);
-
-	std::cout << lucy.use_count() << std::endl;
-	std::cout << ricky.use_count() << std::endl;
-
-	return 0;
-}*/
-
-/*// 1. std::unique_ptr
-
-class Person
+class Teacher;
+class Student
 {
 public:
-	Person(const std::string& name)
+	Student(const std::string& name)
 	{
 		m_name = name;
+
+		std::cout << "Student +" << std::endl;
+
+	}
+	~Student()
+	{
+		std::cout << "Student -" << std::endl;
 	}
 
-	std::string Name() { return m_name; }
+	std::string NameS() 
+	{ 
+		return m_name; 
+	}
+	std::shared_ptr<Student> GetT()
+	{ 
+		m_teacher; 
+	}
+
+	friend void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S);
+private:
+	std::string m_name;
+	std::shared_ptr<Teacher> m_teacher;
+};
+class Teacher
+{
+public:
+	Teacher(const std::string& name)
+	{
+		m_name = name;
+		m_i = -1;
+
+		std::cout << "Teacher +" << std::endl;
+
+	}
+	~Teacher()
+	{
+
+		std::cout << "Teacher -" << std::endl;
+	}
+	std::shared_ptr<Student> GetS()
+	{
+		return m_student[m_i];
+	}
+	void addstudent()
+	{
+		m_i = m_i + 1;
+		std::cout << "Student create" << std::endl;
+	}
+	friend void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S);
+
 
 private:
 	std::string m_name;
+	int m_i;
+	std::shared_ptr<Student> m_student[10];
+
 };
 
-void func(std::unique_ptr<Person> p, std::unique_ptr<Person> q)
+void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S)
 {
-
-}
-
-std::unique_ptr<Person> PersonFactory(const std::string& name)
-{
-	return std::make_unique<Person>(name);
+	T->addstudent();
+	S->m_teacher = T;
+	T->GetS() = S;
+	std::cout << T->m_name << " teach " << S->m_name << std::endl;
 }
 
 int main()
 {
-	//func(std::unique_ptr<Person>(new Person("Alex")), std::unique_ptr<Person>(new Person("Petr")));
-
-	auto person = std::make_unique<Person>("Misha");
-	person->Name();
-
-	Person* raw = person.get();
-	raw->Name();
-
-	auto person_3 = PersonFactory("Ivan");
-
-	auto person_2 = person;		// Копировать unique_ptr нельзя!!!
-
-
-
-	return 0;
-}*/
-
-
-/*template <typename T>
-class SmartPointer
-{
-public:
-	SmartPointer(int n)
-	{
-		m_ptr = new T[n];
-	}
-
-	~SmartPointer()
-	{
-		delete[] m_ptr;
-	}
-
-	T* get() { return m_ptr; }
-
-private:
-	T* m_ptr;
-};
-
-int main()
-{
-	while (1)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		SmartPointer<double> mas(1000000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	}
-
-	return 0;
-}*/
+	std::shared_ptr<Student> student1 = std::make_shared<Student>("Misha");
+	std::shared_ptr<Student> student2 = std::make_shared<Student>("Sanencka");
+	std::shared_ptr<Student> student2 = std::make_shared<Student>("PavlyshaSmirn");
+	std::shared_ptr<Teacher> teacher = std::make_shared<Teacher>("Maksim Vladimirovich");
+	teach(teacher, student1);
+	teach(teacher, student2);
+}
