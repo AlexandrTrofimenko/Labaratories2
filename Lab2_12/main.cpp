@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <memory> 
 #include <string>
-class Teacher;
+class BossOfTheGym;
 class Student
 {
 public:
@@ -26,23 +26,23 @@ public:
 		m_teacher; 
 	}
 
-	friend void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S);
+	friend void teach(std::shared_ptr<BossOfTheGym>& T, std::shared_ptr<Student>& S);
 private:
 	std::string m_name;
-	std::shared_ptr<Teacher> m_teacher;
+	std::shared_ptr<BossOfTheGym> m_teacher;
 };
-class Teacher
+class BossOfTheGym
 {
 public:
-	Teacher(const std::string& name)
+	BossOfTheGym(const std::string& name)
 	{
 		m_name = name;
-		m_i = -1;
+		m_i = 0;
 
 		std::cout << "Teacher +" << std::endl;
 
 	}
-	~Teacher()
+	~BossOfTheGym()
 	{
 
 		std::cout << "Teacher -" << std::endl;
@@ -56,7 +56,7 @@ public:
 		m_i = m_i + 1;
 		std::cout << "Student create" << std::endl;
 	}
-	friend void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S);
+	friend void teach(std::shared_ptr<BossOfTheGym>& T, std::shared_ptr<Student>& S);
 
 
 private:
@@ -66,7 +66,7 @@ private:
 
 };
 
-void teach(std::shared_ptr<Teacher>& T, std::shared_ptr<Student>& S)
+void teach(std::shared_ptr<BossOfTheGym>& T, std::shared_ptr<Student>& S)
 {
 	T->addstudent();
 	S->m_teacher = T;
@@ -78,8 +78,13 @@ int main()
 {
 	std::shared_ptr<Student> student1 = std::make_shared<Student>("Misha");
 	std::shared_ptr<Student> student2 = std::make_shared<Student>("Sanencka");
-	std::shared_ptr<Student> student2 = std::make_shared<Student>("PavlyshaSmirn");
-	std::shared_ptr<Teacher> teacher = std::make_shared<Teacher>("Maksim Vladimirovich");
-	teach(teacher, student1);
-	teach(teacher, student2);
+	std::shared_ptr<Student> student3 = std::make_shared<Student>("PavlyshaSmirn");
+	std::shared_ptr<BossOfTheGym> BOG = std::make_shared<BossOfTheGym>("Maksim Vladimirovich");
+	std::shared_ptr<BossOfTheGym> NN = std::make_shared<BossOfTheGym>("New Name");
+	teach(BOG, student1);
+	teach(BOG, student2);
+	teach(NN, student3);
+
+
+
 }

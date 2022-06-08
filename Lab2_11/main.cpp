@@ -1,11 +1,13 @@
 ﻿#include <iostream>
 #include <CodeGenerator.hpp>
+#include <msgolovenko.hpp>
+#include <java.hpp>
+#include <function.hpp>
 
 int main()
 {
-    CodeGenerator* code = codeFactory(Lang::MSGOLOVENKO);
-    std::cout << code->generateCode() << std::endl;
-
+    CodeGenerator* code = codeFactory(Java);
+    cout << code->someCodeRelatedThing() << endl;
     delete code;
     return 0;
 }

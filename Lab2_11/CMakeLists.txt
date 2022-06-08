@@ -12,4 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 include_directories("inc/")
 
-add_executable("${PROJECT_NAME}" main.cpp inc/CodeGenerator.hpp)
+add_executable("${PROJECT_NAME}" main.cpp inc/CodeGenerator.hpp 
+inc/msgolovenko.hpp inc/java.hpp 
+inc/function.hpp)
