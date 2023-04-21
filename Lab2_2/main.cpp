@@ -90,22 +90,27 @@ int main()
 		mas1[i] = rand();
 		mas2[i] = mas1[i];
 	}
-/*	for (int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 	{
 		std::cout << mas1[i] << " ";
-	}*/
+	}
 	std::cout << std::endl;
 	Timer a;
-	QuickSort(1, N - 1, mas1);
+	QuickSort(0, N - 1, mas1);
+	for (int i = 0; i < N; i++)
+	{
+		std::cout << mas1[i] << " ";
+	}
+	std::cout << std::endl;
 	std::cout << "Time elapsed quicksort: " << a.elapsed() << std::endl;
 /*	for (int i = 0; i < N; i++)
 	{
 		std::cout << mas1[i] << " ";
 	}*/
-	std::cout << std::endl;
+/*	std::cout << std::endl;
 	Timer b;
 	BUBBLESORT(mas2, N);
-	std::cout << "Time elapsed bubblesort: " << b.elapsed() << std::endl;
+	std::cout << "Time elapsed bubblesort: " << b.elapsed() << std::endl; */
 /*	for (int i = 0; i < N; i++)
 	{
 		std::cout << mas2[i] << " ";

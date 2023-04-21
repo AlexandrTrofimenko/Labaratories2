@@ -138,7 +138,7 @@ void SEARCHING(int data, Elem* v, int c) // c - глубина
 {
     if (v == nullptr)
     {
-        std::cout << "n";
+        std::cout << "no";
         return;
     }
     else if (v->data == data)
@@ -186,15 +186,15 @@ int main()
         }
         else if (a == '?')
         {
-            SEARCHING(b, root, 0);
+            SEARCHING(b, root, 1);
             std::cout << '\n';
         }
         else if (a == '-')
         {
             DELETE(b, root);
-      //      std::cout << "Deleting" <<std::endl;
-    //        PASS(root, 2);
-  //          std::cout << "Deleting" << std::endl;
+            std::cout << "Deleting" <<std::endl;
+            PASS(root, 2);
+            std::cout << "Deleting" << std::endl;
         }
         else if (a == 'E')
         {
